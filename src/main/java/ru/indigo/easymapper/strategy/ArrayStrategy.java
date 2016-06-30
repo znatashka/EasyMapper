@@ -1,11 +1,9 @@
 package ru.indigo.easymapper.strategy;
 
-import javafx.util.Pair;
-import ru.indigo.easymapper.mapper.TypeMapper;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-
 
 public class ArrayStrategy implements Strategy {
 
@@ -27,13 +25,14 @@ public class ArrayStrategy implements Strategy {
 
     @Override
     public <S> Object getValue(S source, Field sourceField, Field targetField) {
-        Pair<Class, Object[]> pair = TypeMapper.array(source, sourceField, targetField);
+        Object[] sourceArray = (Object[]) ReflectionUtils.getField(sourceField, source);
+        Class targetGenericClass = targetField.getType().getComponentType();
 
         Object array = null;
-        if (pair.getValue() != null) {
-            array = Array.newInstance(pair.getKey(), pair.getValue().length);
-            for (int i = 0; i < pair.getValue().length; i++) {
-                Array.set(array, i, EASY_MAPPER.map(pair.getValue()[i], pair.getKey()));
+        if (sourceArray != null) {
+            array = Array.newInstance(targetGenericClass, sourceArray.length);
+            for (int i = 0; i < sourceArray.length; i++) {
+                Array.set(array, i, EASY_MAPPER.map(sourceArray[i], targetGenericClass));
             }
         }
         return array;

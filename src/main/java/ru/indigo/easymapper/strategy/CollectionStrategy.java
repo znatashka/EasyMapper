@@ -1,7 +1,6 @@
 package ru.indigo.easymapper.strategy;
 
-import javafx.util.Pair;
-import ru.indigo.easymapper.mapper.TypeMapper;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -30,10 +29,11 @@ public class CollectionStrategy implements Strategy {
     @SuppressWarnings("unchecked")
     @Override
     public <S> Object getValue(S source, Field sourceField, Field targetField) {
-        Pair<ParameterizedType, Collection> pair = TypeMapper.collection(source, sourceField, targetField);
+        Collection sourceCollection = (Collection) ReflectionUtils.getField(sourceField, source);
+        ParameterizedType targetGenericType = (ParameterizedType) targetField.getGenericType();
 
-        return pair.getValue().stream()
-                .map(sourceItem -> EASY_MAPPER.map(sourceItem, (Class) pair.getKey().getActualTypeArguments()[0]))
-                .collect(pair.getKey().getRawType().equals(List.class) ? Collectors.toList() : Collectors.toSet());
+        return sourceCollection.stream()
+                .map(sourceItem -> EASY_MAPPER.map(sourceItem, (Class) targetGenericType.getActualTypeArguments()[0]))
+                .collect(targetGenericType.getRawType().equals(List.class) ? Collectors.toList() : Collectors.toSet());
     }
 }
