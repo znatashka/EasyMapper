@@ -22,7 +22,7 @@ class Detector {
         } else if (checkType(sourceType) == ObjectType.OBJECT && checkType(targetType) == ObjectType.OBJECT) {
             return ObjectStrategy.getInstance();
         }
-        throw new EasyMapperException("Impossible mapping types: " + sourceType.getName() + " and " + targetType.getName());
+        throw new EasyMapperException("Impossible mapping types: " + sourceType.getName() + " <-> " + targetType.getName());
     }
 
     private static ObjectType checkType(Class type) {
