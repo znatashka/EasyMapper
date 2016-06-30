@@ -9,20 +9,15 @@ import java.util.List;
 public class ClientWithCollection {
 
     private List<Client> servers = new ArrayList<>();
+    private Client[] serversArray;
 
     public static ClientWithCollection create() {
         ClientWithCollection clientWithCollection = new ClientWithCollection();
-        Client server = new Client();
-        server.setNumber(1);
-        clientWithCollection.getServers().add(server);
-
-        server = new Client();
-        server.setNumber(2);
-        clientWithCollection.getServers().add(server);
-
-        server = new Client();
-        server.setNumber(3);
-        clientWithCollection.getServers().add(server);
+        for (int i = 0; i < 3; i++) {
+            Client server = new Client();
+            server.setNumber(i);
+            clientWithCollection.getServers().add(server);
+        }
         return clientWithCollection;
     }
 }

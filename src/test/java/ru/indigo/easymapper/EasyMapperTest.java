@@ -76,4 +76,18 @@ public class EasyMapperTest {
         assertFalse(result.getServers().isEmpty());
         assertEquals(clientWithCollection.getServers().size(), result.getServers().size());
     }
+
+    @Test
+    public void createObjectWithArray() throws Exception {
+        // PREPARE
+        ServerWithCollection serverWithCollection = ServerWithCollection.createWArray();
+
+        // ACT
+        ClientWithCollection result = easyMapper.map(serverWithCollection, ClientWithCollection.class);
+
+        // ASSERT
+        assertNotNull(result);
+        assertTrue(result.getServersArray().length > 0);
+        assertEquals(serverWithCollection.getServersArray().length, result.getServersArray().length);
+    }
 }

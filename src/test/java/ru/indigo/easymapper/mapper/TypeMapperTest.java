@@ -66,4 +66,19 @@ public class TypeMapperTest {
         assertFalse(result.getValue().isEmpty());
         assertEquals(serverWithCollection.getServers().size(), result.getValue().size());
     }
+
+    @Test
+    public void array() throws Exception {
+        // PREPARE
+        ServerWithCollection serverWithCollection = ServerWithCollection.createWArray();
+
+        // ACT
+        Pair<Class, Object[]> result = TypeMapper.array(serverWithCollection, new ClientWithCollection(), "serversArray");
+
+        // ASSERT
+        assertNotNull(result);
+        assertNotNull(result.getKey());
+        assertTrue(result.getValue().length > 0);
+        assertEquals(serverWithCollection.getServersArray().length, result.getValue().length);
+    }
 }

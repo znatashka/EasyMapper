@@ -35,4 +35,15 @@ public class TypeMapper {
 
         return new Pair<>(targetGenericType, sourceCollection);
     }
+
+    public static <S, T> Pair<Class, Object[]> array(S source, T target, String fieldName) {
+        Field sourceField = ReflectionUtils.findField(source.getClass(), fieldName);
+        Field targetField = ReflectionUtils.findField(target.getClass(), fieldName);
+        sourceField.setAccessible(true);
+
+        Object[] sourceArray = (Object[]) ReflectionUtils.getField(sourceField, source);
+        Class targetGenericClass = targetField.getType().getComponentType();
+
+        return new Pair<>(targetGenericClass, sourceArray);
+    }
 }
