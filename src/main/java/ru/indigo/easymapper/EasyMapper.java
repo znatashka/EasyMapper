@@ -28,21 +28,22 @@ public class EasyMapper {
         for (Field sourceField : sourceFields) {
             Field targetField = ReflectionUtils.findField(targetClass, sourceField.getName());
             if (targetField != null) {
+                sourceField.setAccessible(true);
                 targetField.setAccessible(true);
 
                 Object value = null;
 
                 if (!Modifier.isStatic(sourceField.getModifiers())) {
                     if (sourceField.getType().isPrimitive() || targetField.getType().isPrimitive()) {
-                        value = TypeMapper.primitive(source, target, sourceField.getName());
+                        value = TypeMapper.primitive(source, sourceField, targetField);
                     } else if (Collection.class.isAssignableFrom(sourceField.getType()) && Collection.class.isAssignableFrom(targetField.getType())) {
-                        value = createCollectionValue(TypeMapper.collection(source, target, sourceField.getName()));
+                        value = createCollectionValue(TypeMapper.collection(source, sourceField, targetField));
                     } else if (Map.class.isAssignableFrom(sourceField.getType()) && Map.class.isAssignableFrom(targetField.getType())) {
                         // TODO: 30.06.2016 маппинг для Map
                     } else if (sourceField.getType().isEnum() || targetField.getType().isEnum()) {
                         // TODO: 30.06.2016 маппинг для Enum
                     } else if (sourceField.getType().isArray() && targetField.getType().isArray()) {
-                        value = createArrayValue(TypeMapper.array(source, target, sourceField.getName()));
+                        value = createArrayValue(TypeMapper.array(source, sourceField, targetField));
                     }
                     // TODO: 29.06.2016 аннотоции для более точного маппинга
 

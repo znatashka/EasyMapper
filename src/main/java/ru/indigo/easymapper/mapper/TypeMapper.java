@@ -12,11 +12,7 @@ import java.util.Collection;
 @Slf4j
 public class TypeMapper {
 
-    public static <S, T> Object primitive(S source, T target, String fieldName) {
-        Field sourceField = ReflectionUtils.findField(source.getClass(), fieldName);
-        Field targetField = ReflectionUtils.findField(target.getClass(), fieldName);
-        sourceField.setAccessible(true);
-
+    public static <S> Object primitive(S source, Field sourceField, Field targetField) {
         if (sourceField.getType().isPrimitive()) {
             return ReflectionUtils.getField(sourceField, source);
         } else {
@@ -25,22 +21,14 @@ public class TypeMapper {
         }
     }
 
-    public static <S, T> Pair<ParameterizedType, Collection> collection(S source, T target, String fieldName) {
-        Field sourceField = ReflectionUtils.findField(source.getClass(), fieldName);
-        Field targetField = ReflectionUtils.findField(target.getClass(), fieldName);
-        sourceField.setAccessible(true);
-
+    public static <S, T> Pair<ParameterizedType, Collection> collection(S source, Field sourceField, Field targetField) {
         Collection sourceCollection = (Collection) ReflectionUtils.getField(sourceField, source);
         ParameterizedType targetGenericType = (ParameterizedType) targetField.getGenericType();
 
         return new Pair<>(targetGenericType, sourceCollection);
     }
 
-    public static <S, T> Pair<Class, Object[]> array(S source, T target, String fieldName) {
-        Field sourceField = ReflectionUtils.findField(source.getClass(), fieldName);
-        Field targetField = ReflectionUtils.findField(target.getClass(), fieldName);
-        sourceField.setAccessible(true);
-
+    public static <S, T> Pair<Class, Object[]> array(S source, Field sourceField, Field targetField) {
         Object[] sourceArray = (Object[]) ReflectionUtils.getField(sourceField, source);
         Class targetGenericClass = targetField.getType().getComponentType();
 

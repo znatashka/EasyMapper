@@ -7,6 +7,7 @@ import ru.indigo.easymapper.model.client.ClientWithCollection;
 import ru.indigo.easymapper.model.server.Server;
 import ru.indigo.easymapper.model.server.ServerWithCollection;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
@@ -20,8 +21,13 @@ public class TypeMapperTest {
         Server source = new Server();
         source.setNumber(123);
 
+        Field sourceField = source.getClass().getDeclaredField("number");
+        sourceField.setAccessible(true);
+        Field targetField = Client.class.getDeclaredField("number");
+        targetField.setAccessible(true);
+
         // ACT
-        Object result = TypeMapper.primitive(source, new Client(), "number");
+        Object result = TypeMapper.primitive(source, sourceField, targetField);
 
         // ASSERT
         assertEquals(source.getNumber(), result);
@@ -32,8 +38,13 @@ public class TypeMapperTest {
         // PREPARE
         Server source = new Server();
 
+        Field sourceField = source.getClass().getDeclaredField("number");
+        sourceField.setAccessible(true);
+        Field targetField = Client.class.getDeclaredField("number");
+        targetField.setAccessible(true);
+
         // ACT
-        Object result = TypeMapper.primitive(source, new Client(), "number");
+        Object result = TypeMapper.primitive(source, sourceField, targetField);
 
         // ASSERT
         assertEquals(0, result);
@@ -45,8 +56,13 @@ public class TypeMapperTest {
         Client source = new Client();
         source.setNumber(123);
 
+        Field sourceField = source.getClass().getDeclaredField("number");
+        sourceField.setAccessible(true);
+        Field targetField = Client.class.getDeclaredField("number");
+        targetField.setAccessible(true);
+
         // ACT
-        Object result = TypeMapper.primitive(source, new Server(), "number");
+        Object result = TypeMapper.primitive(source, sourceField, targetField);
 
         // ASSERT
         assertEquals(source.getNumber(), result);
@@ -57,8 +73,13 @@ public class TypeMapperTest {
         // PREPARE
         ServerWithCollection serverWithCollection = ServerWithCollection.create();
 
+        Field sourceField = serverWithCollection.getClass().getDeclaredField("servers");
+        sourceField.setAccessible(true);
+        Field targetField = ClientWithCollection.class.getDeclaredField("servers");
+        targetField.setAccessible(true);
+
         // ACT
-        Pair<ParameterizedType, Collection> result = TypeMapper.collection(serverWithCollection, new ClientWithCollection(), "servers");
+        Pair<ParameterizedType, Collection> result = TypeMapper.collection(serverWithCollection, sourceField, targetField);
 
         // ASSERT
         assertNotNull(result);
@@ -72,8 +93,13 @@ public class TypeMapperTest {
         // PREPARE
         ServerWithCollection serverWithCollection = ServerWithCollection.createWArray();
 
+        Field sourceField = serverWithCollection.getClass().getDeclaredField("serversArray");
+        sourceField.setAccessible(true);
+        Field targetField = ClientWithCollection.class.getDeclaredField("serversArray");
+        targetField.setAccessible(true);
+
         // ACT
-        Pair<Class, Object[]> result = TypeMapper.array(serverWithCollection, new ClientWithCollection(), "serversArray");
+        Pair<Class, Object[]> result = TypeMapper.array(serverWithCollection, sourceField, targetField);
 
         // ASSERT
         assertNotNull(result);
