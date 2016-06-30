@@ -1,8 +1,6 @@
 package ru.indigo.easymapper;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import ru.indigo.easymapper.exception.EasyMapperException;
 import ru.indigo.easymapper.model.client.Client;
 import ru.indigo.easymapper.strategy.PrimitiveStrategy;
@@ -12,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class DetectorTest {
+public class DetectorTest extends TestExceptionWithMessage {
 
     @Test
     public void findStrategyOk() throws Exception {
@@ -23,8 +21,6 @@ public class DetectorTest {
         assertTrue(PrimitiveStrategy.class.equals(strategy.getClass()));
     }
 
-    @Rule
-    public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void findStrategyError() throws Exception {
