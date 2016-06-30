@@ -4,9 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.indigo.easymapper.exception.EasyMapperException;
 import ru.indigo.easymapper.model.client.Client;
+import ru.indigo.easymapper.model.client.ClientFull;
 import ru.indigo.easymapper.model.client.ClientWithCollection;
 import ru.indigo.easymapper.model.client.ClientWithoutDefConstructor;
 import ru.indigo.easymapper.model.server.Server;
+import ru.indigo.easymapper.model.server.ServerFull;
 import ru.indigo.easymapper.model.server.ServerWithCollection;
 
 import static org.junit.Assert.*;
@@ -89,5 +91,27 @@ public class EasyMapperTest {
         assertNotNull(result);
         assertTrue(result.getServersArray().length > 0);
         assertEquals(serverWithCollection.getServersArray().length, result.getServersArray().length);
+    }
+
+    @Test
+    public void createFullObject() throws Exception {
+        // PREPARE
+        ServerFull server = ServerFull.create();
+
+        // ACT
+        ClientFull result = easyMapper.map(server, ClientFull.class);
+
+        // ASSERT
+        assertNotNull(result);
+        assertEquals(server.getNumber().intValue(), result.getNumber());
+        assertEquals(server.getEnumValue().name(), result.getEnumValue().name());
+        assertEquals(server.getClientNotEnum().name(), result.getClientNotEnum());
+        assertEquals(server.getServers().size(), result.getServers().size());
+        assertTrue(result.getServers().size() == 2);
+        result.getServers().stream().forEach(client -> assertNotNull(server.findServerByNumber(client.getNumber())));
+
+        assertEquals(server.getServersArray().length, result.getServersArray().length);
+        assertTrue(result.getServersArray().length == 1);
+        assertEquals(server.getServersArray()[0].getNumber().intValue(), result.getServersArray()[0].getNumber());
     }
 }
