@@ -105,6 +105,7 @@ public class EasyMapperTest {
         assertNotNull(result);
         assertEquals(server.getNumber().intValue(), result.getNumber());
         assertEquals(server.getString(), result.getString());
+        assertEquals(server.getObject().getNumber().intValue(), result.getObject().getNumber());
         assertEquals(server.getEnumValue().name(), result.getEnumValue().name());
         assertEquals(server.getClientNotEnum().name(), result.getClientNotEnum());
         assertEquals(server.getServers().size(), result.getServers().size());
