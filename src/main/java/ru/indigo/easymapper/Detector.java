@@ -9,7 +9,9 @@ import java.util.Map;
 class Detector {
 
     static Strategy findStrategy(Class sourceType, Class targetType) {
-        if (checkType(sourceType) == ObjectType.PRIMITIVE || checkType(targetType) == ObjectType.PRIMITIVE) {
+        if (checkType(sourceType) == ObjectType.STRING && checkType(targetType) == ObjectType.STRING) {
+            return StringStrategy.getInstance();
+        } else if (checkType(sourceType) == ObjectType.PRIMITIVE || checkType(targetType) == ObjectType.PRIMITIVE) {
             return PrimitiveStrategy.getInstance();
         } else if (checkType(sourceType) == ObjectType.COLLECTION && checkType(targetType) == ObjectType.COLLECTION) {
             return CollectionStrategy.getInstance();
@@ -26,6 +28,7 @@ class Detector {
     }
 
     private static ObjectType checkType(Class type) {
+        if (String.class.equals(type)) return ObjectType.STRING;
         if (type.isEnum()) return ObjectType.ENUM;
         if (type.isArray()) return ObjectType.ARRAY;
         if (type.isPrimitive()) return ObjectType.PRIMITIVE;
@@ -35,6 +38,6 @@ class Detector {
     }
 
     private enum ObjectType {
-        PRIMITIVE, OBJECT, COLLECTION, ARRAY, MAP, ENUM
+        STRING, PRIMITIVE, OBJECT, COLLECTION, ARRAY, MAP, ENUM
     }
 }

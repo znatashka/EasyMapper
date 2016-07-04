@@ -10,6 +10,8 @@ import java.util.Set;
 public class ServerFull {
 
     private Integer number;
+    private String string;
+    private Server object;
     private Set<Server> servers = new HashSet<>();
     private Server[] serversArray;
     private ServerWithEnum.ServerEnum enumValue;
@@ -18,6 +20,8 @@ public class ServerFull {
     public static ServerFull create() {
         ServerFull full = new ServerFull();
         full.setNumber(1);
+        full.setString("text");
+        full.setObject(new Server(100));
         full.setServersArray(new Server[]{new Server(2)});
         full.setServers(new HashSet<>(Arrays.asList(new Server(3), new Server(4))));
         full.setEnumValue(ServerWithEnum.ServerEnum.VALUE);

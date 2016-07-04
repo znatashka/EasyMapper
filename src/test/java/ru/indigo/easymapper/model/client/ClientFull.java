@@ -9,6 +9,8 @@ import java.util.List;
 public class ClientFull {
 
     private int number;
+    private String string;
+    private Client object;
     private List<Client> servers = new ArrayList<>();
     private Client[] serversArray;
     private ClientWithEnum.ClientEnum enumValue;
