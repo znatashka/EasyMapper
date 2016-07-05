@@ -4,7 +4,7 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 
-public class ObjectStrategy implements Strategy {
+public class ObjectStrategy extends AbstractStrategy {
 
     private static ObjectStrategy instance;
 

@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MapStrategy implements Strategy {
+public class MapStrategy extends AbstractStrategy {
 
     private static MapStrategy instance;
 
@@ -35,6 +35,7 @@ public class MapStrategy implements Strategy {
         return getValue(sourceMap, targetGenericType);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <S, T> Object getValue(S source, T targetClass) {
         ParameterizedType parameterizedType = (ParameterizedType) targetClass;
@@ -45,9 +46,8 @@ public class MapStrategy implements Strategy {
             Object sourceValue = ((Map.Entry) entry).getValue();
             Type type = parameterizedType.getActualTypeArguments()[1];
             if (type instanceof ParameterizedType) {
-                if (((ParameterizedType) type).getRawType().equals(Map.class))
-                    return getValue(sourceValue, (ParameterizedType) type);
-                return CollectionStrategy.getInstance().getValue(sourceValue, (ParameterizedType) type);
+                if (Map.class.equals(((ParameterizedType) type).getRawType())) return getValue(sourceValue, type);
+                else return CollectionStrategy.getInstance().getValue(sourceValue, type);
             } else {
                 return EASY_MAPPER.map(sourceValue, (Class) type);
             }

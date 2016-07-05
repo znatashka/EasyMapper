@@ -5,7 +5,7 @@ import ru.indigo.easymapper.exception.EasyMapperException;
 
 import java.lang.reflect.Field;
 
-public class EnumStrategy implements Strategy {
+public class EnumStrategy extends AbstractStrategy {
 
     private static EnumStrategy instance;
 

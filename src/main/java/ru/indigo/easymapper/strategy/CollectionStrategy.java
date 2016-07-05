@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CollectionStrategy implements Strategy {
+public class CollectionStrategy extends AbstractStrategy {
 
     private static CollectionStrategy instance;
 

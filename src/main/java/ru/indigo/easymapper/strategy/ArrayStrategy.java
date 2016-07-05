@@ -5,7 +5,7 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
-public class ArrayStrategy implements Strategy {
+public class ArrayStrategy extends AbstractStrategy {
 
     private static ArrayStrategy instance;
 
