@@ -29,7 +29,6 @@ public class EasyMapper {
                         // TODO: 29.06.2016 аннотоции для более точного маппинга
 
                         Strategy strategy = Detector.findStrategy(sourceField.getType(), targetField.getType());
-
                         ReflectionUtils.setField(targetField, target, strategy.extractValueFromField(source, sourceField, targetField));
                     }
                 }
