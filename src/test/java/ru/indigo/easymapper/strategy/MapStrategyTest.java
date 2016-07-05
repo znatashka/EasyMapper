@@ -31,12 +31,10 @@ public class MapStrategyTest {
         // ASSERT
         assertNotNull(value);
         Map<Integer, List<String>> map = (Map<Integer, List<String>>) value;
-        for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
+        map.entrySet().stream().forEach(entry -> {
             Set<String> serverValue = server.getMap().get(entry.getKey());
             assertNotNull(serverValue);
-            for (String s : serverValue) {
-                assertTrue(entry.getValue().contains(s));
-            }
-        }
+            serverValue.stream().forEach(s -> assertTrue(entry.getValue().contains(s)));
+        });
     }
 }

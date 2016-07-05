@@ -2,9 +2,7 @@ package ru.indigo.easymapper.model.server;
 
 import lombok.Data;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class ServerFull {
@@ -17,6 +15,7 @@ public class ServerFull {
     private Server[] serversArray;
     private ServerWithEnum.ServerEnum enumValue;
     private ServerWithEnum.ServerEnum clientNotEnum;
+    private Map<Integer, List<Server>> map = new HashMap<>();
 
     public static ServerFull create() {
         ServerFull full = new ServerFull();
@@ -28,6 +27,7 @@ public class ServerFull {
         full.setServers(new HashSet<>(Arrays.asList(new Server(3), new Server(4))));
         full.setEnumValue(ServerWithEnum.ServerEnum.VALUE);
         full.setClientNotEnum(ServerWithEnum.ServerEnum.VALUE);
+        full.getMap().put(Integer.MAX_VALUE, Arrays.asList(new Server(10_000), new Server(20_000)));
         return full;
     }
 

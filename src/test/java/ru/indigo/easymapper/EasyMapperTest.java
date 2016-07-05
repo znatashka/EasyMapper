@@ -109,6 +109,7 @@ public class EasyMapperTest {
         assertEquals(server.getObject().getNumber().intValue(), result.getObject().getNumber());
         assertEquals(server.getEnumValue().name(), result.getEnumValue().name());
         assertEquals(server.getClientNotEnum().name(), result.getClientNotEnum());
+
         assertEquals(server.getServers().size(), result.getServers().size());
         assertTrue(result.getServers().size() == 2);
         result.getServers().stream().forEach(client -> assertNotNull(server.findServerByNumber(client.getNumber())));
@@ -116,5 +117,8 @@ public class EasyMapperTest {
         assertEquals(server.getServersArray().length, result.getServersArray().length);
         assertTrue(result.getServersArray().length == 1);
         assertEquals(server.getServersArray()[0].getNumber().intValue(), result.getServersArray()[0].getNumber());
+
+        assertEquals(server.getMap().size(), result.getMap().size());
+        result.getMap().entrySet().stream().forEach(entry -> assertNotNull(server.getMap().get(entry.getKey())));
     }
 }

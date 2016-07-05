@@ -3,7 +3,9 @@ package ru.indigo.easymapper.model.client;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class ClientFull {
@@ -16,4 +18,5 @@ public class ClientFull {
     private Client[] serversArray;
     private ClientWithEnum.ClientEnum enumValue;
     private String clientNotEnum;
+    private Map<Integer, List<Client>> map = new HashMap<>();
 }
