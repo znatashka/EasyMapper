@@ -9,6 +9,7 @@ import java.util.List;
 public class ClientFull {
 
     private int number;
+    private Long longNumber;
     private String string;
     private Client object;
     private List<Client> servers = new ArrayList<>();

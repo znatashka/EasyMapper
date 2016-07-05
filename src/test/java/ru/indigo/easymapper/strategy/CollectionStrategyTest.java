@@ -22,7 +22,7 @@ public class CollectionStrategyTest {
         targetField.setAccessible(true);
 
         // ACT
-        Object value = CollectionStrategy.getInstance().getValue(serverWithCollection, sourceField, targetField);
+        Object value = CollectionStrategy.getInstance().extractValueFromField(serverWithCollection, sourceField, targetField);
 
         // ASSERT
         assertNotNull(value);

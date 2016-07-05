@@ -9,9 +9,7 @@ import java.util.Map;
 class Detector {
 
     static Strategy findStrategy(Class sourceType, Class targetType) {
-        if (checkType(sourceType) == ObjectType.STRING && checkType(targetType) == ObjectType.STRING) {
-            return StringStrategy.getInstance();
-        } else if (checkType(sourceType) == ObjectType.PRIMITIVE || checkType(targetType) == ObjectType.PRIMITIVE) {
+        if (checkType(sourceType) == ObjectType.PRIMITIVE && checkType(targetType) == ObjectType.PRIMITIVE) {
             return PrimitiveStrategy.getInstance();
         } else if (checkType(sourceType) == ObjectType.COLLECTION && checkType(targetType) == ObjectType.COLLECTION) {
             return CollectionStrategy.getInstance();
@@ -27,17 +25,20 @@ class Detector {
         throw new EasyMapperException("Impossible mapping types: " + sourceType.getName() + " <-> " + targetType.getName());
     }
 
-    private static ObjectType checkType(Class type) {
-        if (String.class.equals(type)) return ObjectType.STRING;
+    static ObjectType checkType(Class type) {
+        if (type.isPrimitive() ||
+                Number.class.isAssignableFrom(type) ||
+                Character.class.equals(type) ||
+                Byte.class.equals(type) ||
+                CharSequence.class.isAssignableFrom(type)) return ObjectType.PRIMITIVE;
         if (type.isEnum()) return ObjectType.ENUM;
         if (type.isArray()) return ObjectType.ARRAY;
-        if (type.isPrimitive()) return ObjectType.PRIMITIVE;
         if (Collection.class.isAssignableFrom(type)) return ObjectType.COLLECTION;
         if (Map.class.isAssignableFrom(type)) return ObjectType.MAP;
         return ObjectType.OBJECT;
     }
 
-    private enum ObjectType {
-        STRING, PRIMITIVE, OBJECT, COLLECTION, ARRAY, MAP, ENUM
+    enum ObjectType {
+        PRIMITIVE, OBJECT, COLLECTION, ARRAY, MAP, ENUM
     }
 }

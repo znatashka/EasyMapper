@@ -22,7 +22,7 @@ public class PrimitiveStrategyTest {
         targetField.setAccessible(true);
 
         // ACT
-        Object result = PrimitiveStrategy.getInstance().getValue(source, sourceField, targetField);
+        Object result = PrimitiveStrategy.getInstance().extractValueFromField(source, sourceField, targetField);
 
         // ASSERT
         assertEquals(source.getNumber(), result);
@@ -39,7 +39,7 @@ public class PrimitiveStrategyTest {
         targetField.setAccessible(true);
 
         // ACT
-        Object result = PrimitiveStrategy.getInstance().getValue(source, sourceField, targetField);
+        Object result = PrimitiveStrategy.getInstance().extractValueFromField(source, sourceField, targetField);
 
         // ASSERT
         assertEquals(0, result);
@@ -57,7 +57,7 @@ public class PrimitiveStrategyTest {
         targetField.setAccessible(true);
 
         // ACT
-        Object result = PrimitiveStrategy.getInstance().getValue(source, sourceField, targetField);
+        Object result = PrimitiveStrategy.getInstance().extractValueFromField(source, sourceField, targetField);
 
         // ASSERT
         assertEquals(source.getNumber(), result);

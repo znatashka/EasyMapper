@@ -21,7 +21,7 @@ public class ArrayStrategyTest {
         targetField.setAccessible(true);
 
         // ACT
-        Object value = ArrayStrategy.getInstance().getValue(serverWithCollection, sourceField, targetField);
+        Object value = ArrayStrategy.getInstance().extractValueFromField(serverWithCollection, sourceField, targetField);
 
         // ASSERT
         assertNotNull(value);

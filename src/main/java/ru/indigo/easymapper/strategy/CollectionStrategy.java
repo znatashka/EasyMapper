@@ -26,13 +26,19 @@ public class CollectionStrategy implements Strategy {
     private CollectionStrategy() {
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <S> Object getValue(S source, Field sourceField, Field targetField) {
+    public <S> Object extractValueFromField(S source, Field sourceField, Field targetField) {
         Collection sourceCollection = (Collection) ReflectionUtils.getField(sourceField, source);
         ParameterizedType targetGenericType = (ParameterizedType) targetField.getGenericType();
 
-        return sourceCollection.stream()
+        return getValue(sourceCollection, targetGenericType);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <S, T> Object getValue(S source, T targetClass) {
+        ParameterizedType targetGenericType = (ParameterizedType) targetClass;
+        return ((Collection) source).stream()
                 .map(sourceItem -> EASY_MAPPER.map(sourceItem, (Class) targetGenericType.getActualTypeArguments()[0]))
                 .collect(targetGenericType.getRawType().equals(List.class) ? Collectors.toList() : Collectors.toSet());
     }

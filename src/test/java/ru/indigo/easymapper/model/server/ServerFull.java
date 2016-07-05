@@ -10,6 +10,7 @@ import java.util.Set;
 public class ServerFull {
 
     private Integer number;
+    private Long longNumber;
     private String string;
     private Server object;
     private Set<Server> servers = new HashSet<>();
@@ -20,6 +21,7 @@ public class ServerFull {
     public static ServerFull create() {
         ServerFull full = new ServerFull();
         full.setNumber(1);
+        full.setLongNumber(Long.MAX_VALUE);
         full.setString("text");
         full.setObject(new Server(100));
         full.setServersArray(new Server[]{new Server(2)});

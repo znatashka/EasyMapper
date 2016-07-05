@@ -1,8 +1,12 @@
 package ru.indigo.easymapper.strategy;
 
-import ru.indigo.easymapper.exception.EasyMapperException;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MapStrategy implements Strategy {
 
@@ -22,9 +26,31 @@ public class MapStrategy implements Strategy {
     private MapStrategy() {
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public <S> Object getValue(S source, Field sourceField, Field targetField) {
-        // TODO: 30.06.2016 метод не реализован
-        throw new EasyMapperException("Method not implemented");
+    public <S> Object extractValueFromField(S source, Field sourceField, Field targetField) {
+        Map<Object, Object> sourceMap = (Map<Object, Object>) ReflectionUtils.getField(sourceField, source);
+        ParameterizedType targetGenericType = (ParameterizedType) targetField.getGenericType();
+
+        return getValue(sourceMap, targetGenericType);
+    }
+
+    @Override
+    public <S, T> Object getValue(S source, T targetClass) {
+        ParameterizedType parameterizedType = (ParameterizedType) targetClass;
+        return ((Map) source).entrySet().stream().collect(Collectors.toMap(entry -> {
+            Object sourceKey = ((Map.Entry) entry).getKey();
+            return EASY_MAPPER.map(sourceKey, (Class) parameterizedType.getActualTypeArguments()[0]);
+        }, entry -> {
+            Object sourceValue = ((Map.Entry) entry).getValue();
+            Type type = parameterizedType.getActualTypeArguments()[1];
+            if (type instanceof ParameterizedType) {
+                if (((ParameterizedType) type).getRawType().equals(Map.class))
+                    return getValue(sourceValue, (ParameterizedType) type);
+                return CollectionStrategy.getInstance().getValue(sourceValue, (ParameterizedType) type);
+            } else {
+                return EASY_MAPPER.map(sourceValue, (Class) type);
+            }
+        }));
     }
 }

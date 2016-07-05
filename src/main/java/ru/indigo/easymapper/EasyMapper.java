@@ -15,24 +15,33 @@ import java.lang.reflect.Modifier;
 public class EasyMapper {
 
     public <T, S> T map(S source, Class<T> targetClass) {
-        T target = ObjectCreator.createTarget(targetClass);
+        if (isCustomObject(targetClass)) {
+            T target = ObjectCreator.createTarget(targetClass);
 
-        Field[] sourceFields = source.getClass().getDeclaredFields();
-        for (Field sourceField : sourceFields) {
-            Field targetField = ReflectionUtils.findField(targetClass, sourceField.getName());
-            if (targetField != null) {
-                sourceField.setAccessible(true);
-                targetField.setAccessible(true);
+            Field[] sourceFields = source.getClass().getDeclaredFields();
+            for (Field sourceField : sourceFields) {
+                Field targetField = ReflectionUtils.findField(targetClass, sourceField.getName());
+                if (targetField != null) {
+                    sourceField.setAccessible(true);
+                    targetField.setAccessible(true);
 
-                if (!Modifier.isStatic(sourceField.getModifiers())) {
-                    // TODO: 29.06.2016 аннотоции для более точного маппинга
+                    if (!Modifier.isStatic(sourceField.getModifiers())) {
+                        // TODO: 29.06.2016 аннотоции для более точного маппинга
 
-                    Strategy strategy = Detector.findStrategy(sourceField.getType(), targetField.getType());
+                        Strategy strategy = Detector.findStrategy(sourceField.getType(), targetField.getType());
 
-                    ReflectionUtils.setField(targetField, target, strategy.getValue(source, sourceField, targetField));
+                        ReflectionUtils.setField(targetField, target, strategy.extractValueFromField(source, sourceField, targetField));
+                    }
                 }
             }
+            return target;
+        } else {
+            Strategy strategy = Detector.findStrategy(source.getClass(), targetClass);
+            return targetClass.cast(strategy.getValue(source, targetClass));
         }
-        return target;
+    }
+
+    private static <T> boolean isCustomObject(Class<T> targetClass) {
+        return Detector.checkType(targetClass) == Detector.ObjectType.OBJECT;
     }
 }

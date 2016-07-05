@@ -24,12 +24,17 @@ public class PrimitiveStrategy implements Strategy {
     }
 
     @Override
-    public <S> Object getValue(S source, Field sourceField, Field targetField) {
-        if (sourceField.getType().isPrimitive()) {
-            return ReflectionUtils.getField(sourceField, source);
+    public <S> Object extractValueFromField(S source, Field sourceField, Field targetField) {
+        Object value = ReflectionUtils.getField(sourceField, source);
+        if (value != null) {
+            return getValue(value, targetField.getClass());
         } else {
-            Object value = ReflectionUtils.getField(sourceField, source);
-            return value == null ? Defaults.defaultValue(targetField.getType()) : value;
+            return Defaults.defaultValue(targetField.getType());
         }
+    }
+
+    @Override
+    public <S, T> Object getValue(S source, T targetClass) {
+        return source;
     }
 }

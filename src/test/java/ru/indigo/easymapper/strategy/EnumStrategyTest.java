@@ -26,7 +26,7 @@ public class EnumStrategyTest extends TestExceptionWithMessage {
         targetField.setAccessible(true);
 
         // ACT
-        Object value = EnumStrategy.getInstance().getValue(serverWithEnum, sourceField, targetField);
+        Object value = EnumStrategy.getInstance().extractValueFromField(serverWithEnum, sourceField, targetField);
 
         // ASSERT
         assertNotNull(value);
@@ -46,7 +46,7 @@ public class EnumStrategyTest extends TestExceptionWithMessage {
         targetField.setAccessible(true);
 
         // ACT
-        Object value = EnumStrategy.getInstance().getValue(serverWithEnum, sourceField, targetField);
+        Object value = EnumStrategy.getInstance().extractValueFromField(serverWithEnum, sourceField, targetField);
 
         // ASSERT
         assertNotNull(value);
@@ -66,7 +66,7 @@ public class EnumStrategyTest extends TestExceptionWithMessage {
         targetField.setAccessible(true);
 
         // ACT
-        Object value = EnumStrategy.getInstance().getValue(clientWithEnum, sourceField, targetField);
+        Object value = EnumStrategy.getInstance().extractValueFromField(clientWithEnum, sourceField, targetField);
 
         // ASSERT
         assertNotNull(value);
@@ -90,6 +90,6 @@ public class EnumStrategyTest extends TestExceptionWithMessage {
         expectedEx.expectMessage("Impossible mapping types: " + Integer.class.getName() + " <-> " + int.class.getName());
 
         // ACT
-        EnumStrategy.getInstance().getValue(server, sourceField, targetField);
+        EnumStrategy.getInstance().extractValueFromField(server, sourceField, targetField);
     }
 }

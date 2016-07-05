@@ -25,7 +25,7 @@ public class ObjectStrategyTest {
         targetField.setAccessible(true);
 
         // ACT
-        Object value = ObjectStrategy.getInstance().getValue(server, sourceField, targetField);
+        Object value = ObjectStrategy.getInstance().extractValueFromField(server, sourceField, targetField);
 
         // ASSERT
         assertNotNull(value);

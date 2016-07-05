@@ -8,5 +8,7 @@ public interface Strategy {
 
     EasyMapper EASY_MAPPER = new EasyMapper();
 
-    <S> Object getValue(S source, Field sourceField, Field targetField);
+    <S> Object extractValueFromField(S source, Field sourceField, Field targetField);
+
+    <S, T> Object getValue(S source, T targetClass);
 }

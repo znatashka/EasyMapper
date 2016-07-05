@@ -24,15 +24,20 @@ public class ArrayStrategy implements Strategy {
     }
 
     @Override
-    public <S> Object getValue(S source, Field sourceField, Field targetField) {
+    public <S> Object extractValueFromField(S source, Field sourceField, Field targetField) {
         Object[] sourceArray = (Object[]) ReflectionUtils.getField(sourceField, source);
         Class targetGenericClass = targetField.getType().getComponentType();
 
+        return getValue(sourceArray, targetGenericClass);
+    }
+
+    @Override
+    public <S, T> Object getValue(S source, T targetClass) {
         Object array = null;
-        if (sourceArray != null) {
-            array = Array.newInstance(targetGenericClass, sourceArray.length);
-            for (int i = 0; i < sourceArray.length; i++) {
-                Array.set(array, i, EASY_MAPPER.map(sourceArray[i], targetGenericClass));
+        if (source != null) {
+            array = Array.newInstance((Class) targetClass, ((Object[]) source).length);
+            for (int i = 0; i < ((Object[]) source).length; i++) {
+                Array.set(array, i, EASY_MAPPER.map(((Object[]) source)[i], (Class) targetClass));
             }
         }
         return array;
