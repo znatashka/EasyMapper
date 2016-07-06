@@ -25,7 +25,7 @@ public class EasyMapperTest {
     @Test
     public void createEmptyObjectOk() {
         // ACT
-        Client result = easyMapper.map(new Server(), Client.class);
+        ClientFull result = easyMapper.map(new ServerFull(), ClientFull.class);
 
         // ASSERT
         assertNotNull(result);
