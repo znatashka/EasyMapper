@@ -30,6 +30,7 @@ class Detector {
                 Number.class.isAssignableFrom(type) ||
                 Character.class.equals(type) ||
                 Byte.class.equals(type) ||
+                Boolean.class.equals(type) ||
                 CharSequence.class.isAssignableFrom(type)) return ObjectType.PRIMITIVE;
         if (type.isEnum()) return ObjectType.ENUM;
         if (type.isArray()) return ObjectType.ARRAY;

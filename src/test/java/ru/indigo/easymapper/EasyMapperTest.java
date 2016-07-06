@@ -3,12 +3,10 @@ package ru.indigo.easymapper;
 import org.junit.Before;
 import org.junit.Test;
 import ru.indigo.easymapper.exception.EasyMapperException;
-import ru.indigo.easymapper.model.client.Client;
-import ru.indigo.easymapper.model.client.ClientFull;
-import ru.indigo.easymapper.model.client.ClientWithCollection;
-import ru.indigo.easymapper.model.client.ClientWithoutDefConstructor;
+import ru.indigo.easymapper.model.client.*;
 import ru.indigo.easymapper.model.server.Server;
 import ru.indigo.easymapper.model.server.ServerFull;
+import ru.indigo.easymapper.model.server.ServerWithAnnotations;
 import ru.indigo.easymapper.model.server.ServerWithCollection;
 
 import static org.junit.Assert.*;
@@ -23,7 +21,7 @@ public class EasyMapperTest {
     }
 
     @Test
-    public void createEmptyObjectOk() {
+    public void mapEmptyObjectOk() {
         // ACT
         ClientFull result = easyMapper.map(new ServerFull(), ClientFull.class);
 
@@ -32,13 +30,13 @@ public class EasyMapperTest {
     }
 
     @Test(expected = EasyMapperException.class)
-    public void createEmptyObjectError() {
+    public void mapEmptyObjectError() {
         // ACT
         easyMapper.map(new Server(), ClientWithoutDefConstructor.class);
     }
 
     @Test
-    public void createObject() {
+    public void mapObject() {
         // PREPARE
         Server server = new Server();
         server.setNumber(123);
@@ -52,7 +50,7 @@ public class EasyMapperTest {
     }
 
     @Test
-    public void createObjectWithCollectionSetToList() {
+    public void mapObjectWithCollectionSetToList() {
         // PREPARE
         ServerWithCollection serverWithCollection = ServerWithCollection.create();
 
@@ -66,7 +64,7 @@ public class EasyMapperTest {
     }
 
     @Test
-    public void createObjectWithCollectionListToSet() throws Exception {
+    public void mapObjectWithCollectionListToSet() throws Exception {
         // PREPARE
         ClientWithCollection clientWithCollection = ClientWithCollection.create();
 
@@ -80,7 +78,7 @@ public class EasyMapperTest {
     }
 
     @Test
-    public void createObjectWithArray() throws Exception {
+    public void mapObjectWithArray() throws Exception {
         // PREPARE
         ServerWithCollection serverWithCollection = ServerWithCollection.createWArray();
 
@@ -94,7 +92,7 @@ public class EasyMapperTest {
     }
 
     @Test
-    public void createFullObject() throws Exception {
+    public void mapFullObject_ServerToClient() throws Exception {
         // PREPARE
         ServerFull server = ServerFull.create();
 
@@ -109,6 +107,8 @@ public class EasyMapperTest {
         assertEquals(server.getObject().getNumber().intValue(), result.getObject().getNumber());
         assertEquals(server.getEnumValue().name(), result.getEnumValue().name());
         assertEquals(server.getClientNotEnum().name(), result.getClientNotEnum());
+        assertEquals(server.isTrue(), result.getIsTrue());
+        assertEquals(server.getServerMapToField().getNumber().intValue(), result.getClientMapToField().getNumber());
 
         assertEquals(server.getServers().size(), result.getServers().size());
         assertTrue(result.getServers().size() == 2);
@@ -120,5 +120,49 @@ public class EasyMapperTest {
 
         assertEquals(server.getMap().size(), result.getMap().size());
         result.getMap().entrySet().stream().forEach(entry -> assertNotNull(server.getMap().get(entry.getKey())));
+    }
+
+    @Test
+    public void mapFullObject_ClientToServer() throws Exception {
+        // PREPARE
+        ClientFull client = ClientFull.create();
+
+        // ACT
+        ServerFull result = easyMapper.map(client, ServerFull.class);
+
+        // ASSERT
+        assertNotNull(result);
+        assertEquals(client.getNumber(), result.getNumber().intValue());
+        assertEquals(client.getString(), result.getString());
+        assertEquals(client.getLongNumber(), result.getLongNumber());
+        assertEquals(client.getObject().getNumber(), result.getObject().getNumber().intValue());
+        assertEquals(client.getEnumValue().name(), result.getEnumValue().name());
+        assertEquals(client.getClientNotEnum(), result.getClientNotEnum().name());
+        assertFalse(result.isTrue());
+
+        assertEquals(client.getServers().size(), result.getServers().size());
+        assertTrue(result.getServers().size() == 2);
+        result.getServers().stream().forEach(server -> assertNotNull(client.findServerByNumber(server.getNumber())));
+
+        assertEquals(client.getServersArray().length, result.getServersArray().length);
+        assertTrue(result.getServersArray().length == 1);
+        assertEquals(client.getServersArray()[0].getNumber(), result.getServersArray()[0].getNumber().intValue());
+
+        assertEquals(client.getMap().size(), result.getMap().size());
+        result.getMap().entrySet().stream().forEach(entry -> assertNotNull(client.getMap().get(entry.getKey())));
+    }
+
+    @Test
+    public void mapObjectAnnotation_MapTpField() {
+        // PREPARE
+        ServerWithAnnotations source = new ServerWithAnnotations();
+        source.setServerString("serverString");
+
+        // ACT
+        ClientWithAnnotations result = easyMapper.map(source, ClientWithAnnotations.class);
+
+        // ASSERT
+        assertNotNull(result);
+        assertEquals(source.getServerString(), result.getClientString());
     }
 }

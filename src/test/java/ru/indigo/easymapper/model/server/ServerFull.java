@@ -1,6 +1,7 @@
 package ru.indigo.easymapper.model.server;
 
 import lombok.Data;
+import ru.indigo.easymapper.annotations.MappingToField;
 
 import java.util.*;
 
@@ -11,11 +12,14 @@ public class ServerFull {
     private Long longNumber;
     private String string;
     private Server object;
+    private boolean isTrue;
     private Set<Server> servers = new HashSet<>();
     private Server[] serversArray;
     private ServerWithEnum.ServerEnum enumValue;
     private ServerWithEnum.ServerEnum clientNotEnum;
     private Map<Integer, List<Server>> map = new HashMap<>();
+    @MappingToField("clientMapToField")
+    private Server serverMapToField;
 
     public static ServerFull create() {
         ServerFull full = new ServerFull();
@@ -23,6 +27,8 @@ public class ServerFull {
         full.setLongNumber(Long.MAX_VALUE);
         full.setString("text");
         full.setObject(new Server(100));
+        full.setTrue(true);
+        full.setServerMapToField(new Server(60));
         full.setServersArray(new Server[]{new Server(2)});
         full.setServers(new HashSet<>(Arrays.asList(new Server(3), new Server(4))));
         full.setEnumValue(ServerWithEnum.ServerEnum.VALUE);
