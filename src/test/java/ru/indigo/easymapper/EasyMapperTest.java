@@ -32,7 +32,7 @@ public class EasyMapperTest {
     @Test(expected = EasyMapperException.class)
     public void mapEmptyObjectError() {
         // ACT
-        easyMapper.map(new Server(), ClientWithoutDefConstructor.class);
+        easyMapper.map(new Server(12), ClientWithoutDefConstructor.class);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class EasyMapperTest {
     }
 
     @Test
-    public void mapFullObject_ServerToClient() throws Exception {
+    public void mapFullObjectServerToClient() throws Exception {
         // PREPARE
         ServerFull server = ServerFull.create();
 
@@ -123,7 +123,7 @@ public class EasyMapperTest {
     }
 
     @Test
-    public void mapFullObject_ClientToServer() throws Exception {
+    public void mapFullObjectClientToServer() throws Exception {
         // PREPARE
         ClientFull client = ClientFull.create();
 
@@ -153,7 +153,7 @@ public class EasyMapperTest {
     }
 
     @Test
-    public void mapObjectAnnotation_MapTpField() {
+    public void mapObjectAnnotationMapTpField() {
         // PREPARE
         ServerWithAnnotations source = new ServerWithAnnotations();
         source.setServerString("serverString");

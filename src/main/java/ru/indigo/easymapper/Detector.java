@@ -8,7 +8,7 @@ import java.util.Map;
 
 class Detector {
 
-    static Strategy findStrategy(Class sourceType, Class targetType) {
+    protected static Strategy findStrategy(Class sourceType, Class targetType) {
         if (checkType(sourceType) == ObjectType.PRIMITIVE && checkType(targetType) == ObjectType.PRIMITIVE) {
             return PrimitiveStrategy.getInstance();
         } else if (checkType(sourceType) == ObjectType.COLLECTION && checkType(targetType) == ObjectType.COLLECTION) {
@@ -25,7 +25,7 @@ class Detector {
         throw new EasyMapperException("Impossible mapping types: " + sourceType.getName() + " <-> " + targetType.getName());
     }
 
-    static ObjectType checkType(Class type) {
+    protected static ObjectType checkType(Class type) {
         if (type.isPrimitive() ||
                 Number.class.isAssignableFrom(type) ||
                 Character.class.equals(type) ||

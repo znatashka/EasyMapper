@@ -4,5 +4,5 @@ import ru.indigo.easymapper.EasyMapper;
 
 abstract class AbstractStrategy implements Strategy {
 
-    EasyMapper EASY_MAPPER = new EasyMapper();
+    protected EasyMapper EASY_MAPPER = new EasyMapper();
 }

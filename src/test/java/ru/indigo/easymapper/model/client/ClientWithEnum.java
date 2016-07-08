@@ -13,10 +13,10 @@ public class ClientWithEnum {
         VALUE(1);
 
         @Getter
-        private int i;
+        private int code;
 
-        ClientEnum(int i) {
-            this.i = i;
+        ClientEnum(int code) {
+            this.code = code;
         }
     }
 }
